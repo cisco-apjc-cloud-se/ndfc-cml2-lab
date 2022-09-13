@@ -1,0 +1,42 @@
+- hosts: localhost
+  gather_facts: no
+  collections:
+    - cisco.cml
+  vars:
+    cml_host: cml2-n1.mel.ciscolabs.com
+    cml_username: admin
+    cml_password: C!sco123
+    cml_lab: DC2
+    cml_lab_file: cml_lab_file.yml
+  connection: local
+  tasks:
+    - name: Stop the lab
+      cml_lab:
+        host: "{{ cml_host }}"
+        user: "{{ cml_username }}"
+        password: "{{ cml_password }}"
+        lab: "{{ cml_lab }}"
+        state: stopped
+      tags:
+        - stop
+        - wipe
+        - erase
+    - name: Wipe the lab
+      cml_lab:
+        host: "{{ cml_host }}"
+        user: "{{ cml_username }}"
+        password: "{{ cml_password }}"
+        lab: "{{ cml_lab }}"
+        state: wiped
+      tags:
+        - wipe
+        - erase
+    - name: Erase the lab
+      cml_lab:
+        host: "{{ cml_host }}"
+        user: "{{ cml_username }}"
+        password: "{{ cml_password }}"
+        lab: "{{ cml_lab }}"
+        state: absent
+      tags:
+        - erase

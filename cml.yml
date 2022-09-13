@@ -1,0 +1,5 @@
+plugin: cisco.cml.cml_inventory
+host: cml2-n1.mel.ciscolabs.com
+username: admin
+password: C!sco123
+lab: DC2
