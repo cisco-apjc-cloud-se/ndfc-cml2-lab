@@ -12,6 +12,22 @@
     cml_lab_file: cml_lab_file.yml
     startup: host  # Specify 'host' for per host startup
     wait: yes
+    ### NDFC Data IPs ###
+    ndfc_n1_data_ip: 10.66.209.2
+    ndfc_n2_data_ip: 10.66.209.3
+    ndfc_n3_data_ip: 10.66.209.4
+    ### Per Pod Details ###
+    # pod_num: 1
+    # oob_mgmt_ip_mask: 10.67.29.35/24
+    # oob_mgmt_gw_ip: 10.67.29.1
+  ### Per Pod Details ###
+  vars_prompt:
+    - name: pod_num
+      prompt: Enter Pod Number
+    - name: oob_mgmt_ip_mask
+      prompt: Enter OOB Management IP & Mask
+    - name: oob_mgmt_gw_ip
+      prompt: Enter OOB Management Gateway IP
   tasks:
     - name: Create the lab
       cml_lab:
