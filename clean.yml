@@ -2,41 +2,52 @@
   gather_facts: no
   collections:
     - cisco.cml
+  vars_prompt:
+    ### Per Pod Details ###
+    - name: pod_num
+      prompt: Enter Pod Number
+      private: no
   vars:
+    ### CML2 Cluster Details ###
     cml_host: cml2-n1.mel.ciscolabs.com
     cml_username: admin
     cml_password: C!sco123
-    cml_lab: DC2
     cml_lab_file: cml_lab_file.yml
   connection: local
   tasks:
-    - name: Stop the lab
-      cml_lab:
-        host: "{{ cml_host }}"
-        user: "{{ cml_username }}"
-        password: "{{ cml_password }}"
-        lab: "{{ cml_lab }}"
-        state: stopped
-      tags:
-        - stop
-        - wipe
-        - erase
-    - name: Wipe the lab
-      cml_lab:
-        host: "{{ cml_host }}"
-        user: "{{ cml_username }}"
-        password: "{{ cml_password }}"
-        lab: "{{ cml_lab }}"
-        state: wiped
-      tags:
-        - wipe
-        - erase
-    - name: Erase the lab
-      cml_lab:
-        host: "{{ cml_host }}"
-        user: "{{ cml_username }}"
-        password: "{{ cml_password }}"
-        lab: "{{ cml_lab }}"
-        state: absent
-      tags:
-        - erase
+    - name: Confirm Deletion
+      pause:
+        prompt: "Are you sure you want to remove the lab fabric for Pod #{{pod_num}}? (yes/no)"
+      register: confirm_delete
+    - block:
+        - name: Stop the lab
+          cml_lab:
+            host: "{{ cml_host }}"
+            user: "{{ cml_username }}"
+            password: "{{ cml_password }}"
+            lab: "Automation Lab Pod {{pod_num}}" #"{{ cml_lab }}"
+            state: stopped
+          tags:
+            - stop
+            # - wipe
+            # - erase
+        - name: Wipe the lab
+          cml_lab:
+            host: "{{ cml_host }}"
+            user: "{{ cml_username }}"
+            password: "{{ cml_password }}"
+            lab: "Automation Lab Pod {{pod_num}}" # "{{ cml_lab }}"
+            state: wiped
+          tags:
+            - wipe
+            # - erase
+        - name: Erase the lab
+          cml_lab:
+            host: "{{ cml_host }}"
+            user: "{{ cml_username }}"
+            password: "{{ cml_password }}"
+            lab: "Automation Lab Pod {{pod_num}}" # "{{ cml_lab }}"
+            state: absent
+          tags:
+            - erase
+      when: confirm_delete.user_input | bool

@@ -1,5 +1,5 @@
 ---
-- name: Build NDFC VXLAN EVPN Lab on cml2
+- name: Build NDFC VXLAN EVPN Lab on CML2 Cluster
   hosts: localhost
   gather_facts: no
   collections:
@@ -11,8 +11,8 @@
     cml_password: C!sco123
     ### POAP Template File ###
     cml_lab_file: cml_lab_file.yml
-    startup: host  # Specify 'host' for per host startup
-    wait: yes
+    startup: all  # Specify 'host' for per host startup
+    # wait: no
     ### NDFC Data IPs ###
     ndfc_n1_data_ip: 10.66.209.2
     ndfc_n2_data_ip: 10.66.209.3
@@ -25,10 +25,16 @@
   vars_prompt:
     - name: pod_num
       prompt: Enter Pod Number
+      private: no
     - name: oob_mgmt_ip_mask
-      prompt: Enter OOB Management IP & Mask
+      prompt: Enter OOB Management IP/Mask
+      private: no
     - name: oob_mgmt_gw_ip
       prompt: Enter OOB Management Gateway IP
+      private: no
+    - name: oob_mgmt_gw_mac
+      prompt: Enter OOB Management Gateway MAC Address
+      private: no
   tasks:
     - name: Create the lab
       cml_lab:
@@ -37,20 +43,23 @@
         password: "{{ cml_password }}"
         lab: "Automation Lab Pod {{pod_num}}"
         state: "{{ 'started' if startup == 'all' else 'present' }}"
-        file: "{{ cml_lab_file }}"
+        # file: "{{ cml_lab_file }}"
+        topology: "{{ lookup('template', cml_lab_file) }}"
       register: results
 
-    - name: Check to see if the Lab is there
-      cml_lab_facts:
-        host: "{{ cml_host }}"
-        user: "{{ cml_username }}"
-        password: "{{ cml_password }}"
-        lab: "{{ cml_lab }}"
-      register: cml_lab_facts
-      when: wait | bool
+    # - name: Check to see if the Lab is there
+    #   cml_lab_facts:
+    #     host: "{{ cml_host }}"
+    #     user: "{{ cml_username }}"
+    #     password: "{{ cml_password }}"
+    #     lab: "Automation Lab Pod {{pod_num}}"
+    #   register: cml_lab_facts
+    #   when: wait | bool
 
-    - name: Refresh Inventory
-      meta: refresh_inventory
+    # - name: Refresh Inventory
+    #   meta: refresh_inventory
+
+
 
 # - name: Start Individual Nodes
 #   hosts: cml_hosts # from dynamic inventory
@@ -80,7 +89,7 @@
 #           user: "{{ cml_username }}"
 #           password: "{{ cml_password }}"
 #           config: "#"
-#           lab: "{{ cml_lab }}"
+#           lab: "Automation Lab Pod #{{pod_num}}"
 #           state: started
 #         delegate_to: localhost
 #       - name: Pause for 30 seconds
@@ -106,7 +115,7 @@
 #           user: "{{ cml_username }}"
 #           password: "{{ cml_password }}"
 #           config: "{{ cml_config_content | default(omit, true) }}"
-#           lab: "{{ cml_lab }}"
+#           lab: "Automation Lab Pod #{{pod_num}}"
 #           state: started
 #         delegate_to: localhost
 #       - name: Pause for 30 seconds

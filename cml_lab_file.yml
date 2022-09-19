@@ -1,7 +1,7 @@
 lab:
   description: ''
   notes: ''
-  title: Automation Lab Pod {{pod_num}}
+  title: Automation Lab Pod #{{pod_num}}
   version: 0.1.0
 links:
   - id: l0
@@ -294,6 +294,7 @@ nodes:
       interface Ethernet1/1
         no switchport
         ip address {{oob_mgmt_ip_mask}}
+        ip arp {{oob_mgmt_gw_ip}} {{oob_mgmt_gw_mac}}
         no shutdown
 
       interface Ethernet1/2
@@ -1447,7 +1448,7 @@ nodes:
     hide_links: false
     id: n11
     image_definition: N9K-10-2-3
-    label: POD1-WAN
+    label: POD{{pod_num}}-WAN
     node_definition: nxosv9000
     ram: 0
     tags: []
