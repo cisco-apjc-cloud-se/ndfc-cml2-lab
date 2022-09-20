@@ -11,7 +11,7 @@
     cml_password: C!sco123
     ### POAP Template File ###
     cml_lab_file: cml_lab_file.yml
-    startup: all  # Specify 'host' for per host startup
+    startup: host  # Specify 'host' for per host startup
     # wait: no
     ### NDFC Data IPs ###
     ndfc_n1_data_ip: 10.66.209.2
