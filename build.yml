@@ -17,15 +17,9 @@
     ndfc_n1_data_ip: 10.66.209.2
     ndfc_n2_data_ip: 10.66.209.3
     ndfc_n3_data_ip: 10.66.209.4
-    ### Per Pod Details ###
-    # pod_num: 1
-    # oob_mgmt_ip_mask: 10.67.29.35/24
-    # oob_mgmt_gw_ip: 10.67.29.1
-  ### Per Pod Details ###
+    ndfc_trap_vip: 10.66.209.7
   vars_prompt:
-    - name: pod_num
-      prompt: Enter Pod Number
-      private: no
+      ### OOB Mgmt Details ###
     - name: oob_mgmt_ip_mask
       prompt: Enter OOB Management IP/Mask
       private: no
@@ -41,7 +35,7 @@
         host: "{{ cml_host }}"
         user: "{{ cml_username }}"
         password: "{{ cml_password }}"
-        lab: "Automation Lab Pod {{pod_num}}"
+        lab: "Automation Lab v3"
         state: "{{ 'started' if startup == 'all' else 'present' }}"
         # file: "{{ cml_lab_file }}"
         topology: "{{ lookup('template', cml_lab_file) }}"

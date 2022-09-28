@@ -2,11 +2,6 @@
   gather_facts: no
   collections:
     - cisco.cml
-  vars_prompt:
-    ### Per Pod Details ###
-    - name: pod_num
-      prompt: Enter Pod Number
-      private: no
   vars:
     ### CML2 Cluster Details ###
     cml_host: cml2-n1.mel.ciscolabs.com
@@ -17,7 +12,7 @@
   tasks:
     - name: Confirm Deletion
       pause:
-        prompt: "Are you sure you want to remove the lab fabric for Pod #{{pod_num}}? (yes/no)"
+        prompt: "Are you sure you want to remove the Automation Lab v3 fabric? (yes/no)"
       register: confirm_delete
     - block:
         - name: Stop the lab
@@ -25,7 +20,7 @@
             host: "{{ cml_host }}"
             user: "{{ cml_username }}"
             password: "{{ cml_password }}"
-            lab: "Automation Lab Pod {{pod_num}}" #"{{ cml_lab }}"
+            lab: "Automation Lab Pod v3" #"{{ cml_lab }}"
             state: stopped
           tags:
             - stop
@@ -36,7 +31,7 @@
             host: "{{ cml_host }}"
             user: "{{ cml_username }}"
             password: "{{ cml_password }}"
-            lab: "Automation Lab Pod {{pod_num}}" # "{{ cml_lab }}"
+            lab: "Automation Lab Pod v3" # "{{ cml_lab }}"
             state: wiped
           tags:
             - wipe
@@ -46,7 +41,7 @@
             host: "{{ cml_host }}"
             user: "{{ cml_username }}"
             password: "{{ cml_password }}"
-            lab: "Automation Lab Pod {{pod_num}}" # "{{ cml_lab }}"
+            lab: "Automation Lab Pod v3" # "{{ cml_lab }}"
             state: absent
           tags:
             - erase
