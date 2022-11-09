@@ -1,7 +1,7 @@
 ---
 - name: Build NDFC VXLAN EVPN Lab on CML2 Cluster
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   collections:
     - cisco.cml
   vars:
@@ -22,13 +22,13 @@
       ### OOB Mgmt Details ###
     - name: oob_mgmt_ip_mask
       prompt: Enter OOB Management IP/Mask
-      private: no
+      private: false
     - name: oob_mgmt_gw_ip
       prompt: Enter OOB Management Gateway IP
-      private: no
+      private: false
     - name: oob_mgmt_gw_mac
       prompt: Enter OOB Management Gateway MAC Address
-      private: no
+      private: false
   tasks:
     - name: Create the lab
       cml_lab:
@@ -52,9 +52,7 @@
 
     # - name: Refresh Inventory
     #   meta: refresh_inventory
-
-
-
+#
 # - name: Start Individual Nodes
 #   hosts: cml_hosts # from dynamic inventory
 #   connection: local
