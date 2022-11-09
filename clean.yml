@@ -1,6 +1,6 @@
 - name: Wipe NDFC VXLAN EVPN Lab on CML2 Cluster
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   collections:
     - cisco.cml
   vars:
@@ -12,16 +12,18 @@
   connection: local
   tasks:
     - name: Confirm Deletion
-      pause:
+      ansible.builtin.pause:
         prompt: "Are you sure you want to remove the Automation Lab v3 fabric? (yes/no)"
       register: confirm_delete
-    - block:
+    - name: Run Block
+      when: confirm_delete.user_input | bool
+      block:
         - name: Stop the lab
           cml_lab:
             host: "{{ cml_host }}"
             user: "{{ cml_username }}"
             password: "{{ cml_password }}"
-            lab: "Automation Lab Pod v3" #"{{ cml_lab }}"
+            lab: "Automation Lab Pod v3" # "{{ cml_lab }}"
             state: stopped
           tags:
             - stop
@@ -46,4 +48,3 @@
             state: absent
           tags:
             - erase
-      when: confirm_delete.user_input | bool
