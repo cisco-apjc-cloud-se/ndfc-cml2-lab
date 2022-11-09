@@ -1,4 +1,5 @@
-- hosts: localhost
+- name: Wipe NDFC VXLAN EVPN Lab on CML2 Cluster
+  hosts: localhost
   gather_facts: no
   collections:
     - cisco.cml
